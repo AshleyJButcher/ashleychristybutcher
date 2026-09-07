@@ -1,0 +1,6 @@
+# Personal copies of job paperwork stay local.
+# Do not commit employer confidential documents.
+job/files/**
+!job/files/**/.gitkeep
+job/workitems.json
+job/*.csv

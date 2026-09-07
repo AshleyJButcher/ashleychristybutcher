@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Personal job files — timesheet and work-item export." />
+    <title>Job files — Ashley Butcher</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%2326342e'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='38' font-family='serif' font-style='italic' fill='%23f9f6ef'%3EA%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <div class="page-glow glow-one"></div>
+
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="Home">
+        <span class="brand-mark">A.</span>
+        <span>Ashley Butcher</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="../cv/">CV</a>
+        <a href="../job/" aria-current="page">Job</a>
+        <a href="../app/">Round-Up</a>
+        <a class="nav-button" href="../index.html">Home <span>←</span></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <p class="eyebrow"><span></span> June 2026</p>
+        <h1>Files for the <em>job.</em></h1>
+        <p class="hero-copy">
+          Local timesheet and work-item export. Titles and hours only — no
+          accounts, emails, or internal URLs on this page.
+        </p>
+      </section>
+
+      <section class="notice">
+        <p>
+          <strong>Keep this folder private.</strong>
+          The raw export files can contain workplace identifiers. They are
+          gitignored and should not be published.
+        </p>
+      </section>
+
+      <section class="file-board">
+        <a class="file-card" href="june_2026_7pace_timesheet.csv" download>
+          <p class="project-type">CSV</p>
+          <h3>June 2026 timesheet</h3>
+          <p>20 rows, 38 hours. Ticket, title, hours, notes.</p>
+        </a>
+        <a class="file-card" href="workitems.json" download>
+          <p class="project-type">JSON</p>
+          <h3>Work item export</h3>
+          <p>8 items. The table below shows id, title, and state only.</p>
+        </a>
+      </section>
+
+      <section class="data-section">
+        <h2>Timesheet</h2>
+        <p class="section-lead" id="timesheet-summary">Loading local CSV…</p>
+        <div class="table-wrap">
+          <table class="data-table" id="timesheet-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Ticket</th>
+                <th>Title</th>
+                <th>Hours</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="data-section">
+        <h2>Work items</h2>
+        <p class="section-lead" id="workitems-summary">Loading local JSON…</p>
+        <div class="table-wrap">
+          <table class="data-table" id="workitems-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>State</th>
+                <th>Iteration</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand" href="../index.html"><span class="brand-mark">A.</span><span>Ashley Butcher</span></a>
+      <p>Personal copies only.</p>
+      <div class="footer-links">
+        <a href="../cv/">CV</a>
+        <a href="../app/">Round-Up</a>
+      </div>
+    </footer>
+    <script src="job.js"></script>
+  </body>
+</html>
