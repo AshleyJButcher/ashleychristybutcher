@@ -1,4 +1,11 @@
 [build]
-  # Static HTML/CSS/JS site — nothing to compile.
-  command = "echo 'No build step required'"
-  publish = "."
+  # Static site, so there is nothing to compile. The site's publish
+  # directory is pinned to "dist" in the Netlify UI and the deploy step
+  # honours that even when this file says otherwise, so assemble the
+  # publishable files into dist/ instead of fighting it.
+  #
+  # Top-level site folders are listed explicitly rather than copied
+  # wholesale: the job/ data exports are confidential and must never be
+  # published, so new folders have to be opted in here deliberately.
+  command = "rm -rf dist && mkdir -p dist && cp index.html styles.css dist/ && cp -R app cv job projects dist/ && rm -f dist/job/workitems.json dist/job/*.csv && find dist -name '.DS_Store' -delete"
+  publish = "dist"
