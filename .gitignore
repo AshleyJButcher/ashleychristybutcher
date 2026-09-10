@@ -1,3 +1,5 @@
+.DS_Store
+
 # Personal copies of job paperwork stay local.
 # Do not commit employer confidential documents.
 job/files/**

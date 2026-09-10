@@ -152,6 +152,41 @@ a.file-card:hover { transform: translateY(-2px); }
 .data-table td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
 .data-table tr:last-child td { border-bottom: 0; }
 
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.project-boards {
+  max-width: 1136px; margin: 0 auto 100px; padding: 0 32px;
+  display: grid; gap: 28px;
+}
+.todo-board { background: white; border: 1px solid var(--line); padding: 28px; }
+.todo-board-head { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; margin-bottom: 8px; }
+.todo-board-head h2 { font-size: clamp(32px, 4vw, 44px); margin-bottom: 8px; }
+.todo-board-head p { margin: 0; color: #56625c; }
+.todo-progress { text-align: right; font-family: "DM Mono", monospace; font-size: 12px; }
+.todo-progress span { display: block; margin-bottom: 10px; color: var(--moss); }
+.todo-list { list-style: none; margin: 18px 0 0; padding: 0; }
+.todo-item {
+  display: flex; align-items: center; gap: 8px; padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.todo-item label { display: flex; align-items: flex-start; gap: 12px; flex: 1; cursor: pointer; }
+.todo-item input { margin-top: 4px; accent-color: var(--moss); width: 16px; height: 16px; }
+.todo-item.is-done span { text-decoration: line-through; color: #8a938d; }
+.todo-remove {
+  border: 0; background: transparent; color: #8a938d; font-size: 22px;
+  line-height: 1; cursor: pointer; padding: 0 6px;
+}
+.todo-add { display: flex; gap: 10px; margin-top: 18px; }
+.todo-add input {
+  flex: 1; border: 1px solid var(--line); background: var(--paper);
+  padding: 12px 14px; font: inherit; border-radius: 100px;
+}
+.todo-add .button { border: 0; cursor: pointer; }
+.home-todos { padding: 0 32px 110px; max-width: 1136px; margin: 0 auto; }
+.home-todos .file-board { padding: 0; margin: 28px 0 0; max-width: none; grid-template-columns: repeat(3, 1fr); }
+
 @media (max-width: 700px) {
   .site-header { height: auto; min-height: 76px; padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
   nav { gap: 16px; flex-wrap: wrap; }
@@ -162,4 +197,10 @@ a.file-card:hover { transform: translateY(-2px); }
   .notice { margin-left: 20px; margin-right: 20px; }
   .gallery { grid-template-columns: 1fr; padding: 0 20px 72px; }
   .data-section { padding: 0 20px 56px; }
+  .project-boards { padding: 0 20px 72px; }
+  .todo-board-head { flex-direction: column; }
+  .todo-progress { text-align: left; }
+  .todo-add { flex-direction: column; }
+  .home-todos { padding: 0 20px 72px; }
+  .home-todos .file-board { grid-template-columns: 1fr; }
 }
