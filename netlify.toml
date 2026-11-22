@@ -7,5 +7,5 @@
   # Top-level site folders are listed explicitly rather than copied
   # wholesale: the job/ data exports are confidential and must never be
   # published, so new folders have to be opted in here deliberately.
-  command = "rm -rf dist && mkdir -p dist && cp index.html styles.css dist/ && cp -R app cv job projects dist/ && rm -f dist/job/workitems.json dist/job/*.csv && find dist -name '.DS_Store' -delete"
+  command = "rm -rf dist && mkdir -p dist && cp index.html styles.css dist/ && cp -R app cv dashboard job projects dist/ && rm -f dist/job/workitems.json dist/job/*.csv && find dist -name '.DS_Store' -delete"
   publish = "dist"

@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Remaining Expo builds and GitHub Actions minutes." />
+    <meta name="robots" content="noindex" />
+    <title>Usage — Ashley Butcher</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%2326342e'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-size='38' font-family='serif' font-style='italic' fill='%23f9f6ef'%3EA%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      .usage-board { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 1110px; margin: 0 0 60px; padding: 0 32px; }
+      .usage-card { background: white; border: 1px solid var(--line); padding: 28px; min-width: 0; }
+      .usage-card h2 { font-size: clamp(32px, 4vw, 44px); margin-bottom: 6px; }
+      .usage-sub { margin: 0 0 22px; color: #56625c; font-size: 14px; }
+      .usage-big { font-family: "Playfair Display", Georgia, serif; font-size: clamp(56px, 7vw, 84px); line-height: 1; letter-spacing: -.04em; }
+      .usage-big small { font-family: "DM Sans", sans-serif; font-size: 16px; letter-spacing: 0; color: #56625c; margin-left: 8px; }
+      .meter { height: 10px; background: var(--sage); border-radius: 100px; overflow: hidden; margin: 18px 0 8px; }
+      .meter > span { display: block; height: 100%; background: var(--moss); border-radius: 100px; transition: width .4s ease; }
+      .meter.is-low > span { background: var(--clay); }
+      .meter-label { display: flex; justify-content: space-between; font-family: "DM Mono", monospace; font-size: 12px; color: #56625c; }
+      .usage-rows { list-style: none; margin: 22px 0 0; padding: 0; border-top: 1px solid var(--line); }
+      .usage-rows li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+      .usage-rows li span:last-child { font-family: "DM Mono", monospace; font-size: 13px; text-align: right; }
+      .usage-error { margin: 0; padding: 14px 16px; background: #f7e4bd; border-radius: 10px; font-size: 14px; }
+      .usage-meta { max-width: 1110px; margin: 0 0 100px; padding: 0 32px; color: #56625c; font-size: 13px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+      .usage-meta button { font: inherit; font-weight: 700; color: var(--ink); background: none; border: 1px solid var(--ink); border-radius: 100px; padding: 7px 13px; cursor: pointer; }
+      .usage-meta button:hover { background: var(--ink); color: var(--paper); }
+      .skeleton { color: #a3aaa5; }
+      @media (max-width: 700px) {
+        .usage-board { grid-template-columns: 1fr; padding: 0 20px; }
+        .usage-meta { padding: 0 20px; margin-bottom: 72px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-glow glow-one"></div>
+    <div class="page-glow glow-two"></div>
+
+    <header class="site-header">
+      <a class="brand" href="../index.html" aria-label="Home">
+        <span class="brand-mark">A.</span>
+        <span>Ashley Butcher</span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="../cv/">CV</a>
+        <a href="../job/">Job</a>
+        <a href="../app/">Round-Up</a>
+        <a href="../projects/">Projects</a>
+        <a href="../dashboard/" aria-current="page">Usage</a>
+        <a class="nav-button" href="../index.html">Home <span>←</span></a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-hero">
+        <p class="eyebrow"><span></span> This billing period</p>
+        <h1>What's <em>left</em> to spend.</h1>
+        <p class="hero-copy">Expo builds and GitHub Actions minutes remaining before the allowance runs out.</p>
+      </section>
+
+      <section class="usage-board" aria-live="polite">
+        <article class="usage-card" id="expo">
+          <h2>Expo builds</h2>
+          <p class="usage-sub skeleton">Loading…</p>
+        </article>
+        <article class="usage-card" id="github">
+          <h2>Actions minutes</h2>
+          <p class="usage-sub skeleton">Loading…</p>
+        </article>
+      </section>
+
+      <p class="usage-meta">
+        <span id="fetched">Fetching usage…</span>
+        <button type="button" id="refresh">Refresh</button>
+      </p>
+    </main>
+
+    <footer>
+      <a class="brand" href="../index.html"><span class="brand-mark">A.</span><span>Ashley Butcher</span></a>
+      <p>Figures are cached on the server for up to an hour.</p>
+      <div class="footer-links">
+        <a href="../cv/">CV</a>
+        <a href="../projects/">Projects</a>
+        <a href="../app/">Round-Up</a>
+      </div>
+    </footer>
+
+    <script>
+      const fmt = new Intl.NumberFormat();
+      const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+      const day = (iso) => (iso ? new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short" }) : "");
+      const resets = (period) => (period && period.end ? `Resets ${day(period.end)}` : "");
+
+      function meter(used, limit) {
+        const pct = limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
+        const low = limit > 0 && limit - used <= limit * 0.2;
+        return `<div class="meter${low ? " is-low" : ""}" role="progressbar" aria-valuemin="0" aria-valuemax="${limit}" aria-valuenow="${used}"><span style="width:${pct}%"></span></div>
+          <div class="meter-label"><span>${fmt.format(used)} used</span><span>${fmt.format(limit)} included</span></div>`;
+      }
+
+      function renderError(el, title, error) {
+        el.innerHTML = `<h2>${title}</h2><p class="usage-error">Couldn't load: ${esc(error)}</p>`;
+      }
+
+      function renderExpo(d) {
+        const el = document.getElementById("expo");
+        if (!d.ok) return renderError(el, "Expo builds", d.error);
+        const rows = [];
+        if (d.ios) rows.push(`<li><span>iOS</span><span>${fmt.format(d.ios.remaining)} left of ${fmt.format(d.ios.limit)}</span></li>`);
+        if (d.android) rows.push(`<li><span>Android</span><span>${fmt.format(d.android.remaining)} left of ${fmt.format(d.android.limit)}</span></li>`);
+        if (d.overageUsd > 0) rows.push(`<li><span>Overage this period</span><span>$${d.overageUsd.toFixed(2)}</span></li>`);
+        el.innerHTML = `<h2>Expo builds</h2>
+          <p class="usage-sub">${esc(d.account)}${d.plan ? ` · ${esc(d.plan)}` : ""}${d.period ? ` · ${resets(d.period)}` : ""}</p>
+          <div class="usage-big">${fmt.format(d.builds.remaining)}<small>builds left</small></div>
+          ${meter(d.builds.used, d.builds.limit)}
+          ${rows.length ? `<ul class="usage-rows">${rows.join("")}</ul>` : ""}`;
+      }
+
+      function renderGithub(d) {
+        const el = document.getElementById("github");
+        if (!d.ok) return renderError(el, "Actions minutes", d.error);
+        const rows = d.breakdown.map(
+          (b) => `<li><span>${esc(b.sku)}${b.multiplier > 1 ? ` (×${b.multiplier})` : ""}</span><span>${fmt.format(b.minutes)} min</span></li>`,
+        );
+        if (d.billedUsd > 0) rows.push(`<li><span>Billed this month</span><span>$${d.billedUsd.toFixed(2)}</span></li>`);
+        el.innerHTML = `<h2>Actions minutes</h2>
+          <p class="usage-sub">${esc(d.user)} · ${resets(d.period)}</p>
+          <div class="usage-big">${fmt.format(d.minutes.remaining)}<small>minutes left</small></div>
+          ${meter(d.minutes.used, d.minutes.included)}
+          ${rows.length ? `<ul class="usage-rows">${rows.join("")}</ul>` : `<ul class="usage-rows"><li><span>No Actions minutes used yet this month</span><span></span></li></ul>`}`;
+      }
+
+      async function load() {
+        const fetched = document.getElementById("fetched");
+        fetched.textContent = "Fetching usage…";
+        try {
+          const res = await fetch("/api/usage", { headers: { Accept: "application/json" } });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          const data = await res.json();
+          renderExpo(data.expo);
+          renderGithub(data.github);
+          const when = new Date(data.fetchedAt).toLocaleString(undefined, { hour: "numeric", minute: "2-digit", day: "numeric", month: "short" });
+          fetched.textContent = `Last checked ${when}. Refreshes at most every ${Math.round(data.cacheSeconds / 60)} minutes.`;
+        } catch (err) {
+          renderError(document.getElementById("expo"), "Expo builds", err.message);
+          renderError(document.getElementById("github"), "Actions minutes", err.message);
+          fetched.textContent = "Usage service unavailable.";
+        }
+      }
+
+      document.getElementById("refresh").addEventListener("click", load);
+      load();
+    </script>
+  </body>
+</html>
